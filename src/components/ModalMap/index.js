@@ -1,15 +1,13 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Creators as UsersActions } from '../../store/ducks/users';
+import * as UsersActions from '../../store/ducks/useractions';
 import { Creators as ModalActions } from '../../store/ducks/modal';
 import './style.css';
-import { isNull } from 'util';
 
 Modal.setAppElement(document.getElementById('root'));
 
@@ -59,15 +57,6 @@ class ModalMap extends Component {
 
     addUserRequest(input, cordinates);
     this.setState({ input: '' });
-    this.handleMessage();
-  };
-
-  handleMessage = () => {
-    const { message, loading } = this.props.users;
-    while (message === null);
-
-    toast.success(message);
-
     this.handleHideModal();
   };
 

@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
-import { Creators as UserActions } from '../ducks/users';
+import { addUserError, addUserSucess } from '../ducks/useractions';
 import api from '../../services/api';
 
 export function* addUser(action) {
@@ -10,7 +10,7 @@ export function* addUser(action) {
     const isDuplicated = yield select(state => state.users.data.find(favorite => favorite.id === data.id));
 
     if (isDuplicated) {
-      yield put(UserActions.addFavoriteError('Usuário já está adicionado'));
+      yield put(addUserError('Usuário já está adicionado'));
     } else {
       const userData = {
         login: data.login,
@@ -21,12 +21,12 @@ export function* addUser(action) {
       };
 
       yield put(
-        UserActions.addUserSucess(userData, {
+        addUserSucess(userData, {
           message: 'Operação realizada com sucesso.',
         }),
       );
     }
   } catch (err) {
-    yield put(UserActions.addUserError(err, 'Usuário não encontrado ou inválido'));
+    yield put(addUserError());
   }
 }

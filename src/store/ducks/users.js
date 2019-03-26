@@ -14,7 +14,7 @@ Reducers
 const INITIAL_STATE = {
   loading: false,
   data: [],
-  error: false,
+  error: null,
   message: '',
 };
 
@@ -25,38 +25,15 @@ export default function users(state = INITIAL_STATE, action) {
     case Types.ADD_SUCESS:
       return {
         ...state,
+        error: false,
         loading: false,
         data: [...state.data, action.payload.data],
-        message: action.payload.message,
       };
     case Types.ADD_ERROR:
-      return { ...state, loading: false, message: action.payload.message };
+      return { ...state, error: true, loading: false };
     case Types.EXCLUDE:
       return { ...state, data: [state.data.filter(user => user.id !== action.payload.id)] };
     default:
       return state;
   }
 }
-/**
- * Actions
- */
-export const Creators = {
-  addUserRequest: (user, cordinates) => ({
-    type: Types.ADD_REQUEST,
-    payload: { user, cordinates },
-  }),
-
-  addUserSucess: (data, message) => ({
-    type: Types.ADD_SUCESS,
-    payload: { data, message },
-  }),
-
-  addUserError: (error, message) => ({
-    type: Types.ADD_ERROR,
-    payload: { error, message },
-  }),
-  excludeUser: id => ({
-    type: Types.EXCLUDE,
-    payload: { id },
-  }),
-};
