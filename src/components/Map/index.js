@@ -4,8 +4,6 @@ import { bindActionCreators } from 'redux';
 import MapGL, { Marker } from 'react-map-gl';
 import PropTypes from 'prop-types';
 import { Creators as ModalActions } from '../../store/ducks/modal';
-
-import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
 
 class Map extends Component {
@@ -60,7 +58,7 @@ class Map extends Component {
   };
 
   handleMapClick = async (e) => {
-    const [latitude, longitude] = e.lngLat;
+    const [longitude, latitude] = e.lngLat;
     const { showModal } = this.props;
 
     await showModal({ latitude, longitude });
@@ -75,17 +73,17 @@ class Map extends Component {
           // eslint-disable-next-line react/destructuring-assignment
           {...viewportState}
           onClick={this.handleMapClick}
-          mapStyle="mapbox://styles/mapbox/basic-v9"
+          mapStyle="mapbox://styles/mapbox/streets-v10"
           mapboxApiAccessToken="pk.eyJ1IjoiZ2lvYmFzc2V0dG8iLCJhIjoiY2p0a2U2dmx0MzlvcDRibzNsZW54cWoyMCJ9.P7Aq4Z3quFE1nDbI4hR3rA"
           onViewportChange={viewport => this.setState({ viewport })}
         >
           {users.data.map(user => (
             <Marker
-              latitude={user.cordinates.latitude}
               longitude={user.cordinates.longitude}
+              latitude={user.cordinates.latitude}
               key={user.id}
             >
-              <img className="avatar" alt={`${user.name} Avatar`} src={user.avatar} />
+              <img className="avatar" src={user.avatar} alt={user.name} />
             </Marker>
           ))}
         </MapGL>

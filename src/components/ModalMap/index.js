@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
@@ -7,11 +9,13 @@ import { bindActionCreators } from 'redux';
 import { Creators as UsersActions } from '../../store/ducks/users';
 import { Creators as ModalActions } from '../../store/ducks/modal';
 import './style.css';
+import { isNull } from 'util';
 
 Modal.setAppElement(document.getElementById('root'));
 
 class ModalMap extends Component {
   static propTypes = {
+    users: PropTypes.shape({}).isRequired,
     modal: PropTypes.shape({
       isOpen: PropTypes.bool,
       error: PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
@@ -41,15 +45,13 @@ class ModalMap extends Component {
   handleFormSubmit = (e) => {
     e.preventDefault();
 
-    const { loading } = this.props;
+    const { loading } = this.props.users;
 
     if (loading) return;
 
     const { input } = this.state;
 
-    if (!input) {
-      toast.error('Insira um usuário válido');
-    }
+    if (!input) return;
     const {
       addUserRequest,
       modal: { cordinates },
@@ -57,7 +59,15 @@ class ModalMap extends Component {
 
     addUserRequest(input, cordinates);
     this.setState({ input: '' });
-    toast.success('Usuário adicionado com sucesso');
+    this.handleMessage();
+  };
+
+  handleMessage = () => {
+    const { message, loading } = this.props.users;
+    while (message === null);
+
+    toast.success(message);
+
     this.handleHideModal();
   };
 
@@ -97,7 +107,7 @@ class ModalMap extends Component {
 
 const mapStateToProps = state => ({
   modal: state.modal,
-  loading: state.users.loading,
+  users: state.users,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

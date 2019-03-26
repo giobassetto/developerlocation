@@ -20,9 +20,13 @@ export function* addUser(action) {
         cordinates: action.payload.cordinates,
       };
 
-      yield put(UserActions.addUserSucess(userData));
+      yield put(
+        UserActions.addUserSucess(userData, {
+          message: 'Operação realizada com sucesso.',
+        }),
+      );
     }
   } catch (err) {
-    yield put(UserActions.addUserError('Usuário não encontrado'));
+    yield put(UserActions.addUserError(err, 'Usuário não encontrado ou inválido'));
   }
 }
